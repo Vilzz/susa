@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
-const slugify = require('slugify')
 
-const SportObjectDescription = new mongoose.Schema({
+const SportObjectDescriptionSchema = new mongoose.Schema({
   name: { type: String },
   founded: { type: Date },
   introduction: { type: String },
@@ -9,7 +8,17 @@ const SportObjectDescription = new mongoose.Schema({
   history: { type: String },
   video: [String],
   images: [String],
-  trainers: [],
+  sportobject: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'SportObject',
+    required: true,
+  },
+  trainers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    },
+  ],
   social: {
     youtube: {
       type: String,
@@ -28,13 +37,18 @@ const SportObjectDescription = new mongoose.Schema({
     },
   },
   admin: {
-    type: mongoose.Schema.Objectid,
+    type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: true,
+    required: [true, 'Требуется указать id администратора спортивного объекта'],
   },
 })
 
+SportObjectDescriptionSchema.index(
+  { sportobject: 1, admin: 1 },
+  { unique: true }
+)
+
 module.exports = mongoose.model(
   'SportObjectDescription',
-  SportObjectDescription.Schema
+  SportObjectDescriptionSchema
 )

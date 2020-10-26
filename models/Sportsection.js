@@ -34,19 +34,21 @@ const SportsectionSchema = new mongoose.Schema({
   sportobject: {
     type: mongoose.Schema.ObjectId,
     ref: 'SportObject',
-    required: true,
+    required: [true, 'Требуется указать ID спортивного объекта'],
   },
   trainer: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: true,
+    required: [true, 'Требуется указать ID пользователя - тренера секции'],
   },
   cost: {
     type: Number,
+    default: null,
   },
   raiting: {
     type: Number,
-    min: [1, 'Raiting must be at least 1'],
-    max: [10, 'Raiting must can not be more then 10'],
+    min: [1, 'Минимальный рейтинг -  1'],
+    max: [10, 'Максимальный рейтинг -  10'],
   },
 })
+module.exports = mongoose.model('Sportsection', SportsectionSchema)

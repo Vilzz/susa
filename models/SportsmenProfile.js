@@ -1,13 +1,14 @@
 const mongoose = require('mongoose')
 
-const SportsmenProfile = new mongoose.Schema({
+const SportsmenProfileSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'Users',
-    require: true,
+    required: true,
   },
   name: {
     type: String,
+    required: [true, 'Необходимо указать имя'],
   },
   lastname: {
     type: String,
@@ -17,7 +18,7 @@ const SportsmenProfile = new mongoose.Schema({
   },
   gender: {
     type: String,
-    required: true,
+    required: [true, 'Необходимо выбрать пол'],
     enum: ['жен', 'муж'],
   },
   birthday: {
@@ -33,15 +34,18 @@ const SportsmenProfile = new mongoose.Schema({
       'Номер телефона не соответствует формату 89997777777 или +79997777777 или 79995555555',
     ],
   },
-  sportobject: {
+  sportsection: {
     type: mongoose.Schema.ObjectId,
-    ref: 'SportObjects',
+    ref: 'Sportsection',
   },
   trainer: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
   },
-  kindofsport: { type: String },
+  kindofsport: {
+    type: String,
+    required: [true, 'Необходимо указать вид спорта'],
+  },
   qualification: [
     {
       sportrank: String,
@@ -91,4 +95,4 @@ const SportsmenProfile = new mongoose.Schema({
   },
 })
 
-module.exports = mongoose.model('SportsmenProfile', SportsmenProfile.Schema)
+module.exports = mongoose.model('SportsmenProfile', SportsmenProfileSchema)

@@ -20,6 +20,10 @@ connectDB()
 const app = express()
 
 const auth = require('./routes/auth')
+const sportobjects = require('./routes/sportobjects')
+const descriptions = require('./routes/descriptions')
+const sportsmens = require('./routes/sportsmens')
+const sections = require('./routes/sections')
 
 app.use(express.json())
 app.use(cookieParser())
@@ -41,6 +45,10 @@ app.use(hpp())
 app.use(cors())
 
 app.use('/api/v1/auth', auth)
+app.use('/api/v1/sportobjects', sportobjects)
+app.use('/api/v1/descriptions', descriptions)
+app.use('/api/v1/sportsmens', sportsmens)
+app.use('/api/v1/sections', sections)
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000

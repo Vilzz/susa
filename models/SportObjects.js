@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const slugify = require('slugify')
+const geocoder = require('../utils/geocoder')
 
 const SportObjectSchema = new mongoose.Schema(
   {
@@ -16,10 +17,6 @@ const SportObjectSchema = new mongoose.Schema(
       required: [true, 'Добавьте описание обьекта'],
       trim: true,
       maxlength: [1000, 'Максимальная длина описание 1000 знаков'],
-    },
-    fulldesc: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'SportObjectDescription',
     },
     objectType: {
       type: [String],
@@ -51,6 +48,10 @@ const SportObjectSchema = new mongoose.Schema(
         'Баскетбольная площадка',
         'Корт теннисный',
       ],
+    },
+    address: {
+      type: String,
+      required: [true, 'Необходимо добавить адрес объекта'],
     },
     location: {
       type: {
@@ -97,12 +98,12 @@ const SportObjectSchema = new mongoose.Schema(
     },
     averageRating: {
       type: Number,
-      min: [1, 'Raiting must be at least 1'],
-      max: [10, 'Raiting must can not be more then 10'],
+      min: [1, 'Минимальное значение рейтинга -  1'],
+      max: [10, 'Максимальное значение рейтинга - 10'],
     },
     averageCost: Number,
     admin: {
-      type: mongoose.Schema.Objectid,
+      type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: true,
     },
@@ -118,7 +119,58 @@ const SportObjectSchema = new mongoose.Schema(
       },
     },
   },
-  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+    timestamps: true,
+  }
 )
+
+SportObjectSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true })
+  next()
+})
+SportObjectSchema.pre('save', async function (next) {
+  const loc = await geocoder.geocode(this.address)
+  const clarify = await geocoder.reverse({
+    lat: loc[0].latitude,
+    lon: loc[0].longitude,
+  })
+  this.location = {
+    type: 'Point',
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    street: loc[0].streetName,
+    city: loc[0].city,
+    state: loc[0].stateCode,
+    zipcode: clarify[0].zipcode,
+    country: loc[0].countryCode,
+  }
+
+  //Do not save adress in DB
+  this.address = undefined
+  next()
+})
+
+SportObjectSchema.pre('remove', async function (next) {
+  console.log(`Будет удалено описание для спортивного объекта ${this._id}`)
+  await this.model('SportObjectDescription').deleteOne({
+    sportobject: this._id,
+  })
+  next()
+})
+
+SportObjectSchema.virtual('description', {
+  ref: 'SportObjectDescription',
+  localField: '_id',
+  foreignField: 'sportobject',
+  justOne: true,
+})
+SportObjectSchema.virtual('sections', {
+  ref: 'Sportsection',
+  localField: '_id',
+  foreignField: 'sportobject',
+  justOne: false,
+})
 
 module.exports = mongoose.model('SportObject', SportObjectSchema)
