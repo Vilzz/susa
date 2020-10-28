@@ -14,10 +14,10 @@ const SportsmenProfile = require('../models/SportsmenProfile')
 router
   .route('/')
   .get(advancedResults(SportsmenProfile), getSportsmenProfiles)
-  .post(protect, authorise('User'), createSportsmenProfile)
+  .post(protect, authorise('User', 'Super'), createSportsmenProfile)
 router
   .route('/:id')
   .get(getSportsmenProfile)
-  .put(protect, authorise('User'), updateSportsmenProfile)
-  .delete(protect, authorise('User'), deleteSportsmenProfile)
+  .put(protect, authorise('User', 'Super'), updateSportsmenProfile)
+  .delete(protect, authorise('User', 'Super'), deleteSportsmenProfile)
 module.exports = router

@@ -15,12 +15,12 @@ const Sportsection = require('../models/Sportsection')
 router
   .route('/')
   .get(advancedResults(Sportsection), getSportSections)
-  .post(protect, authorise('Admin'), createSportSection)
+  .post(protect, authorise('Admin', 'Super'), createSportSection)
 
 router
   .route('/:id')
   .get(getSportSection)
-  .put(protect, authorise('Admin'), updateSportSection)
-  .delete(protect, authorise('Admin'), deleteSportSection)
+  .put(protect, authorise('Admin', 'Super'), updateSportSection)
+  .delete(protect, authorise('Admin', 'Super'), deleteSportSection)
 
 module.exports = router

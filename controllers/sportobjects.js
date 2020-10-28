@@ -58,7 +58,6 @@ exports.updateSportObject = asyncHandler(async (req, res, next) => {
       )
     )
   }
-
   if (
     sportobject.admin.toString() !== req.user.id &&
     req.user.role !== 'Admin'
@@ -70,7 +69,6 @@ exports.updateSportObject = asyncHandler(async (req, res, next) => {
       )
     )
   }
-
   sportobject = await SportObject.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -122,8 +120,8 @@ exports.getSportObjectsInRadius = asyncHandler(async (req, res, next) => {
 
   // Calc radius using radians
   // Divide distance by radius of Earth
-  // Earth Radius = 3963 mi / 6378.1 km
-  const radius = distance / 3963
+  // Earth Radius = 6371 km
+  const radius = distance / 6371
   const sportobjects = await SportObject.find({
     location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
   })

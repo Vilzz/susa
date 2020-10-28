@@ -44,6 +44,26 @@ UserSchema.pre('save', async function (next) {
   next()
 })
 
+UserSchema.pre('remove', async function (next) {
+  if (this.sportrole === 'Спортсмен') {
+    await this.model('SportsmenProfile').deleteOne({
+      user: this._id,
+    })
+  }
+  if (this.sportrole === 'Тренер') {
+    await this.model('TrainerProfile').deleteOne({
+      user: this._id,
+    })
+  }
+  if (this.sportrole === 'Судья') {
+    await this.model('RefereeProfile').deleteOne({
+      user: this._id,
+    })
+  }
+
+  next()
+})
+
 UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
