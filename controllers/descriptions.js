@@ -3,16 +3,22 @@ const asyncHandler = require('../middleware/asyncHandler')
 
 const SportObjectDescription = require('../models/SportObjectDescription')
 
+//*********************************************************/
 // @desc    Получить список описаний спортивных объектов
 // @route   GET /api/v1/descriptions
 // @access  Публичный
+//*********************************************************/
+
 exports.getSportObjectDescriptions = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults)
 })
 
+//*****************************************************************/
 // @desc    Получить данные заданного описания спортивного объекта
 // @route   GET /api/v1/descriptions/:id
 // @access  Публичный
+//*****************************************************************/
+
 exports.getSportObjectDescription = asyncHandler(async (req, res, next) => {
   const { id } = req.params
   const description = await SportObjectDescription.findById(id)
@@ -27,9 +33,12 @@ exports.getSportObjectDescription = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: description })
 })
 
+//****************************************************/
 // @desc    Добавить описание для спортивного объекта
 // @route   POST /api/v1/descriptions/sportobject/:id
 // @access  Приватный
+//****************************************************/
+
 exports.createSportObjectDescription = asyncHandler(async (req, res, next) => {
   const { id } = req.params
 
@@ -40,9 +49,12 @@ exports.createSportObjectDescription = asyncHandler(async (req, res, next) => {
   res.status(201).json({ success: true, data: description })
 })
 
+//*************************************/
 // @desc    Изменить описание спортивного объекта
 // @route   PUT /api/v1/descriptions/:id
 // @access  Приватный
+//*************************************/
+
 exports.updateSportObjectDescription = asyncHandler(async (req, res, next) => {
   const { id } = req.params
   let description = await SportObjectDescription.findById(id)
@@ -77,9 +89,12 @@ exports.updateSportObjectDescription = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: description })
 })
 
+//*************************************/
 // @desc    Удалить описание спортивного объекта
 // @route   DEELETE /api/v1/descriptions/:id
 // @access  Приватный
+//*************************************/
+
 exports.deleteSportObjectDescription = asyncHandler(async (req, res, next) => {
   const description = await SportObjectDescription.findById(req.params.id)
   if (!description) {

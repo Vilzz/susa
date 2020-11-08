@@ -20,12 +20,12 @@ router.route('/position/:address/:zipcode').get(getPOsitionFromAddress)
 router
   .route('/')
   .get(advancedResults(SportObject, 'description', 'sections'), getSportObjects)
-  .post(protect, authorise('Admin'), createSportObject)
+  .post(protect, authorise('Admin', 'Super'), createSportObject)
 
 router
   .route('/:id')
   .get(getSportObject)
-  .put(protect, authorise('Admin'), updateSportObject)
-  .delete(protect, authorise('Admin'), deleteSportObject)
+  .put(protect, authorise('Admin', 'Super'), updateSportObject)
+  .delete(protect, authorise('Admin', 'Super'), deleteSportObject)
 
 module.exports = router

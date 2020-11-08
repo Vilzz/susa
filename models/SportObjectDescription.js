@@ -29,7 +29,7 @@ const SportObjectDescriptionSchema = new mongoose.Schema({
     facebook: {
       type: String,
     },
-    linkedin: {
+    vk: {
       type: String,
     },
     instagram: {

@@ -29,6 +29,14 @@ exports.getTrainerProfile = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/trainers
 // @access  Приватный
 exports.createTrainerProfile = asyncHandler(async (req, res, next) => {
+  if (req.user.sportrole !== 'Тренер') {
+    return next(
+      new ErrorResponse(
+        `Пользователь с ролью '${req.user.sportrole}' не может создать профиль 'Тренер'`,
+        400
+      )
+    )
+  }
   req.body.user = req.user.id
   const publishedProfile = await TrainerProfile.findOne({ user: req.user.id })
   if (publishedProfile) {

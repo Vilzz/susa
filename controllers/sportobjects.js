@@ -32,7 +32,7 @@ exports.createSportObject = asyncHandler(async (req, res, next) => {
 
   const publishedSportObject = await SportObject.findOne({ user: req.user.id })
 
-  if (publishedSportObject && req.user.role !== 'admin') {
+  if (publishedSportObject && req.user.role !== 'Admin') {
     return next(
       new ErrorResponse(
         `Пользователь с ID ${req.user.id} может создать только один объект`,
@@ -58,16 +58,18 @@ exports.updateSportObject = asyncHandler(async (req, res, next) => {
       )
     )
   }
-  if (
-    sportobject.admin.toString() !== req.user.id &&
-    req.user.role !== 'Admin'
-  ) {
-    return next(
-      new ErrorResponse(
-        `Пользователь ${req.params.id} не может изменить данный объект`,
-        401
+  if (req.user.role !== 'Super') {
+    if (
+      sportobject.admin.toString() !== req.user.id &&
+      req.user.role !== 'Admin'
+    ) {
+      return next(
+        new ErrorResponse(
+          `Пользователь ${req.params.id} не может изменить данный объект`,
+          401
+        )
       )
-    )
+    }
   }
   sportobject = await SportObject.findByIdAndUpdate(req.params.id, req.body, {
     new: true,

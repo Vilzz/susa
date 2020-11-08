@@ -107,11 +107,15 @@ const SportObjectSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    federation: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Federation',
+    },
     administration: {
       first_person: { type: String },
       second_person: { type: String },
       contact: {
-        type: Number,
+        type: String,
         match: [
           /^((\+7|7|8)+([0-9]){10})$/,
           'Номер телефона не соответствует формату 89997777777 или +79997777777 или 79995555555',

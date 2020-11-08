@@ -27,6 +27,14 @@ exports.getSportsmenProfile = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/sportsmens
 // @access  Приватный
 exports.createSportsmenProfile = asyncHandler(async (req, res, next) => {
+  if (req.user.sportrole !== 'Спортсмен') {
+    return next(
+      new ErrorResponse(
+        `Пользователь с ролью '${req.user.sportrole}' не может создать профиль 'Спортсмен'`,
+        400
+      )
+    )
+  }
   req.body.user = req.user.id
   const publishedProfile = await SportsmenProfile.findOne({ user: req.user.id })
   if (publishedProfile) {

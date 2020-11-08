@@ -28,11 +28,15 @@ const TrainerProfileSchema = new mongoose.Schema(
       type: String,
     },
     phone: {
-      type: Number,
+      type: String,
       match: [
         /^((\+7|7|8)+([0-9]){10})$/,
         'Номер телефона не соответствует формату 89997777777 или +79997777777 или 79995555555',
       ],
+    },
+    federation: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Federation',
     },
     sportobject: {
       type: mongoose.Schema.ObjectId,
@@ -69,6 +73,7 @@ const TrainerProfileSchema = new mongoose.Schema(
     },
   },
   {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }

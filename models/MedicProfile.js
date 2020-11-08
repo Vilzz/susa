@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const RefereeProfileSchema = new mongoose.Schema(
+const MedicProfileSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.ObjectId,
@@ -86,24 +86,9 @@ const RefereeProfileSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'SportObjects',
     },
-    kindofsport: { type: String },
     medicalcheckup: {
       checkupdate: Date,
       checkupresult: String,
-    },
-    results: {
-      competition: String,
-      place: String,
-      date: Date,
-      result: String,
-    },
-    isdisqualificated: {
-      result: {
-        type: Boolean,
-        default: false,
-      },
-      from: Date,
-      untill: Date,
     },
     privateservice: {
       servicetitle: String,
@@ -130,4 +115,4 @@ const RefereeProfileSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-module.exports = mongoose.model('RefereeProfile', RefereeProfileSchema)
+module.exports = mongoose.model('MedicProfile', MedicProfileSchema)

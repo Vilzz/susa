@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
   sportrole: {
     type: String,
     required: [true, 'Требуется выбрать роль'],
-    enum: ['Спортсмен', 'Тренер', 'Судья'],
+    enum: ['Спортсмен', 'Тренер', 'Судья', 'Врач'],
   },
   role: {
     type: String,
