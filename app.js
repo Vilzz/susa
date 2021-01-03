@@ -42,7 +42,7 @@ app.use(mongoSanitize())
 app.use(helmet())
 app.use(xss())
 const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 mins
+  windowMs: 10 * 60 * 1000, // 10 минут
   max: 100,
 })
 app.use(limiter)

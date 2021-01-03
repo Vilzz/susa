@@ -9,12 +9,12 @@ const {
   updatePassword,
 } = require('../controllers/auth')
 const router = express.Router()
-const { protect } = require('../middleware/auth')
+const { protect, saybyebye } = require('../middleware/auth')
 
 router.get('/me', protect, getMe)
 router.post('/register', register)
 router.post('/login', login)
-router.get('/logout', logout)
+router.get('/logout', saybyebye, logout)
 router.post('/forgotpassword', forgotPassword)
 router.put('/resetpassword/:resettoken', resetPassword)
 router.put('/updatepassword', protect, updatePassword)

@@ -67,13 +67,14 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @access  Приватный
 //*************************************/
 exports.logout = asyncHandler(async (req, res, next) => {
+  const { name } = req.name
   res.cookie('token', 'none', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
   })
   res.status(200).json({
     success: true,
-    data: 'Доброго дня!',
+    data: name,
   })
 })
 

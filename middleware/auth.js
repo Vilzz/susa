@@ -3,6 +3,25 @@ const asyncHandler = require('./asyncHandler')
 const ErrorResponce = require('../utils/errorResponse')
 const User = require('../models/User')
 
+exports.saybyebye = asyncHandler(async (req, res, next) => {
+  let token
+  if (req.headers.cookie) {
+    token = req.headers.cookie.split('=')[1]
+  }
+  if (!token || token === 'none') {
+    return next(
+      new ErrorResponce('Для того чтобы выйти, надо сначала зайти', 500)
+    )
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    req.name = await User.findById(decoded.id).select('name -_id')
+    next()
+  } catch (err) {
+    return next(new ErrorResponce('Странная ошибка,', 500))
+  }
+})
+
 exports.protect = asyncHandler(async (req, res, next) => {
   let token
   if (
