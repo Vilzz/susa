@@ -43,7 +43,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body
   if (!email || !password) {
     return next(
-      new ErrorResponse('Введите адрес электронной почты и пароль'),
+      new ErrorResponse('Отсутствует адрес электронной почты или пароль'),
       400
     )
   }
