@@ -37,7 +37,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    req.user = await User.findById(decoded.id).select('role _id')
+    req.user = await User.findById(decoded.id).select('role sportrole _id')
     next()
   } catch (err) {
     return next(
