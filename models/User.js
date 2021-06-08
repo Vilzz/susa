@@ -3,36 +3,42 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Требуется ввести имя пользователя'],
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Требуется ввести имя пользователя'],
+    },
+    email: {
+      type: String,
+      required: [true, 'Требуется ввести адрес электронной почты'],
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, 'Требуется ввести пароль'],
+    },
+    sportrole: {
+      type: String,
+      enum: ['Спортсмен', 'Тренер', 'Судья', 'Врач'],
+    },
+    role: {
+      type: String,
+      default: 'User',
+      enum: ['User', 'Admin', 'Super'],
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  email: {
-    type: String,
-    required: [true, 'Требуется ввести адрес электронной почты'],
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: [true, 'Требуется ввести пароль'],
-  },
-  sportrole: {
-    type: String,
-    enum: ['Спортсмен', 'Тренер', 'Судья', 'Врач'],
-  },
-  role: {
-    type: String,
-    default: 'User',
-    enum: ['User', 'Admin', 'Super'],
-  },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-})
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+)
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
@@ -63,6 +69,30 @@ UserSchema.pre('remove', async function (next) {
   next()
 })
 
+UserSchema.virtual('sportsmenprofile', {
+  ref: 'SportsmenProfile',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false,
+})
+UserSchema.virtual('trainerprofile', {
+  ref: 'TrainerProfile',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false,
+})
+UserSchema.virtual('refereeprofile', {
+  ref: 'RefereeProfile',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false,
+})
+UserSchema.virtual('medicprofile', {
+  ref: 'MedicProfile',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false,
+})
 UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,

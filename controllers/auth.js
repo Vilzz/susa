@@ -9,7 +9,14 @@ const User = require('../models/User')
 // @access  Приватный
 //*************************************/
 exports.getMe = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select('-password')
+  const user = await User.findById(req.user.id)
+    .select('-password')
+    .populate([
+      { path: 'sportsmenprofile', select: '_id' },
+      { path: 'trainerprofile', select: '_id' },
+      { path: 'refereeprofile', select: '_id' },
+      { path: 'medicprofile', select: '_id' },
+    ])
   res.status(200).json({
     success: true,
     data: user,
