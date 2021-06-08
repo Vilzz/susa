@@ -73,25 +73,25 @@ UserSchema.virtual('sportsmenprofile', {
   ref: 'SportsmenProfile',
   localField: '_id',
   foreignField: 'user',
-  justOne: false,
+  justOne: true,
 })
 UserSchema.virtual('trainerprofile', {
   ref: 'TrainerProfile',
   localField: '_id',
   foreignField: 'user',
-  justOne: false,
+  justOne: true,
 })
 UserSchema.virtual('refereeprofile', {
   ref: 'RefereeProfile',
   localField: '_id',
   foreignField: 'user',
-  justOne: false,
+  justOne: true,
 })
 UserSchema.virtual('medicprofile', {
   ref: 'MedicProfile',
   localField: '_id',
   foreignField: 'user',
-  justOne: false,
+  justOne: true,
 })
 UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
