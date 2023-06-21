@@ -5,7 +5,7 @@ const MedicProfileSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'Users',
-      require: true,
+      required: true,
     },
     name: {
       type: String,
